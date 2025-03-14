@@ -1,11 +1,8 @@
-const { Router } = require('express');
+const { Router } = require('express')
 const router = Router();
 const {handleSendOtp, handleValidateOtp} = require('../controllers/user/user.controller')
 
+router.post('/auth/generate-otp', handleSendOtp)
+router.post('/auth/validate-otp', handleValidateOtp)
 
-// route for new user registration
-router.post('/auth/generate-otp', handleSendOtp);
-router.post('/auth/validate-otp', handleValidateOtp);
-
-// export
 module.exports = router

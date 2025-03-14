@@ -113,5 +113,10 @@ const handleValidateOtp = async (req, res) => {
   }
 };
 
+// =================================== check user =================================== //
+const handleCheckUser = async (mobile) => {
+
+}
+
 // exports
 module.exports = { handleSendOtp, handleValidateOtp };
