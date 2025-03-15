@@ -1,6 +1,7 @@
 const otpGenerator = require("otp-generator");
 const connectRedis = require("./services/redis");
 const sendOtp = require("./services/whatsapp-api");
+const userModel = require("../../models/user.model");
 
 // =================================== generate, send and store otp =================================== //
 // function that generates otp //
@@ -71,7 +72,7 @@ const handleSendOtp = async (req, res) => {
 };
 
 // =================================== validate otp =================================== //
-const handleValidateOtp = async (req, res) => {
+const handleValidateOtp = async (req, res, next) => {
   const { otp, mobile } = req.body;
 
   if (!otp && !mobile)
@@ -103,6 +104,9 @@ const handleValidateOtp = async (req, res) => {
     // OTP verified successfully, remove OTP from Redis
     await client.del(redisKey);
 
+    // Call handleCheckUser after OTP verification
+    const user = await handleCheckUser(mobile);
+
     return res.status(200).json({
       success: true,
       message: "OTP verified successfully",
@@ -115,8 +119,22 @@ const handleValidateOtp = async (req, res) => {
 
 // =================================== check user =================================== //
 const handleCheckUser = async (mobile) => {
+  if (!mobile) {
+    console.log("mobile no. is not recieved");
+    return;
+  }
 
-}
+  let user = await userModel.findOne({ mobile });
+
+  // if user not found then create a new user
+  if (!user) {
+    console.log(`new user: ${mobile}`);
+    user = new userModel({ mobile });
+    await user.save();
+  }
+
+  return user;
+};
 
 // exports
 module.exports = { handleSendOtp, handleValidateOtp };
