@@ -2,29 +2,21 @@ const axios = require("axios");
 const apiUrl = process.env.WHATSAPP_API_URL;
 const apiKey = process.env.WHATSAPP_API_KEY;
 
-// ======================whatsapp send otp ====================== //
+// ====================== Send OTP via WhatsApp ====================== //
 
 const sendOtp = async (mobile, otp) => {
+  if (!apiUrl || !apiKey) {
+    throw new Error("WhatsApp API URL or API Key is missing.");
+  }
+
   const data = {
-    apiKey: apiKey,
+    apiKey,
     campaignName: "otp_verification_new_new",
     destination: mobile,
-    userName: "Learn More",
+    userName: "MWT",
     templateParams: [otp],
     source: "node js",
-    media: {},
-    buttons: [],
-    carouselCards: [],
-    location: {
-      latitude: "22.5726° N",
-      longitude: "88.3639° E",
-      address: "kolkata",
-      name: "Hello",
-    },
-    attributes: {},
-    paramsFallbackValue: {
-      FirstName: "user",
-    },
+    paramsFallbackValue: { FirstName: "User" },
   };
 
   try {
@@ -32,23 +24,37 @@ const sendOtp = async (mobile, otp) => {
       headers: { "Content-Type": "application/json" },
     });
 
-    if (!response) {
-      console.log(`Whatsapp api is not giving response`);
-      return;
+    return response.data; // Return only the necessary data
+  } catch (error) {
+    // error other than 2xx
+    if (error.response) {
+      console.log("error response data", error.response.data);
+      const message = error.response.data?.message || 'An error occured'
+      console.log(message);
+      return {
+        success: false,
+        message
+      };
     }
 
-    console.log(response.data);
+    // request made but not respond
+    else if (error.request) {
+      console.log("error request", error.request);
+      return {
+        success: false,
+        message: "No response from server",
+      };
+    }
 
-    return response.data
-  } catch (error) {
-    console.error(
-      "Error sending OTP:",
-      error.response ? error.response.data : error.message
-    );
-
-    return error;
+    // network error or unexpected error
+    else {
+      console.log("unexpected error", error.message);
+      return {
+        success: false,
+        message: "unexpected error occured",
+      };
+    }
   }
 };
 
-//
 module.exports = sendOtp;

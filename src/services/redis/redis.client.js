@@ -1,26 +1,34 @@
-const { createClient } = require( 'redis' );
+const { createClient } = require("redis");
 
 const client = createClient({
   socket: {
-    host: 'localhost', // Change to your Redis host if using a remote server
-    port: 6379
-  }
+    host: "localhost", // Change to your Redis host if using a remote server
+    port: 6379,
+  },
 });
 
 // Handle errors
-client.on('error', (err) => console.error('Redis Client Error', err));
+client.on("error", (err) => console.error("Redis Client Error", err));
 
 // Connect Redis once when the server starts
 const connectRedis = async () => {
   if (!client.isOpen) {
     await client.connect();
-    console.log('Connected to Redis');
+    console.log("Connected to Redis");
   }
 };
 
 // Function to set a key-value pair with optional expiry
 const setRedisValue = async (key, value, expiry = null) => {
-  await connectRedis();
+  try {
+    await connectRedis();
+  } catch (error) {
+    console.log(`reddis connection error: ${error}`);
+    return {
+      success: false,
+      message: `unexpected error: ${error.message}`
+    }
+  }
   if (expiry) {
     await client.setEx(key, value, expiry); // Set with expiry
   } else {
@@ -41,7 +49,5 @@ const deleteRedisKey = async (key) => {
   return isOtpDeleted;
 };
 
-
 // Exporting functions to use in other files
-module.exports =  { setRedisValue, getRedisValue, deleteRedisKey };
-
+module.exports = { setRedisValue, getRedisValue, deleteRedisKey };
