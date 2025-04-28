@@ -15,6 +15,7 @@ const handleGenerateOtp = async (req, res) => {
         message: "mobile number is required",
       });
     }
+    
 
     // Ensure mobile number is a string
     if (typeof mobile !== "string") {
@@ -22,10 +23,11 @@ const handleGenerateOtp = async (req, res) => {
     }
 
     const result = await genarateAndSendOtp(mobile);
-    if (!result.success) return res.status(`result.status`).json({
-      success: result.success,
-      message: result.message,
-    });
+    if (!result.success)
+      return res.status(result.status).json({
+        success: result.success,
+        message: result.message,
+      });
 
     return res.status(result.status).json({
       success: result.success,
@@ -54,10 +56,11 @@ const handleValidateOtp = async (req, res) => {
       });
 
     const result = await validateOtp(otp, mobile);
-    if (!result?.success) return res.status(result.status).json({
-      success: result.success,
-      message: result.message,
-    });
+    if (!result?.success)
+      return res.status(result.status).json({
+        success: result.success,
+        message: result.message,
+      });
 
     return res.status(result.status).json({
       success: result.success,

@@ -5,10 +5,10 @@ const {
   handleValidateOtp,
   handleValidateToken,
 } = require("../controller/auth.controller");
-const handleCheckForTokenMiddleWare = require("../../middlewares/auth/auth.middleware");
+const handleCheckForTokenMiddleWare = require("@middlewares/auth/auth.middleware.js");
 
 router.post("/auth/generate-otp", handleGenerateOtp);
 router.post("/auth/validate-otp", handleValidateOtp);
-router.post("/auth/validate-token", handleCheckForTokenMiddleWare, handleValidateToken);
+router.get("/auth/validate-token", handleCheckForTokenMiddleWare, handleValidateToken);
 
 module.exports = router;

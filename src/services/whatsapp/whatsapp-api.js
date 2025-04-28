@@ -11,12 +11,31 @@ const sendOtp = async (mobile, otp) => {
 
   const data = {
     apiKey,
-    campaignName: "otp_verification_new_new",
+    campaignName: "sc_app_otp_verify_login",
     destination: mobile,
-    userName: "MWT",
+    userName: "Learn More",
     templateParams: [otp],
-    source: "node js",
-    paramsFallbackValue: { FirstName: "User" },
+    source: "new-landing-page form",
+    media: {},
+    buttons: [
+      {
+        type: "button",
+        sub_type: "url",
+        index: 0,
+        parameters: [
+          {
+            type: "text",
+            text: "Testing",
+          },
+        ],
+      },
+    ],
+    carouselCards: [],
+    location: {},
+    attributes: {},
+    paramsFallbackValue: {
+      FirstName: "user",
+    },
   };
 
   try {
@@ -29,11 +48,11 @@ const sendOtp = async (mobile, otp) => {
     // error other than 2xx
     if (error.response) {
       console.log("error response data", error.response.data);
-      const message = error.response.data?.message || 'An error occured'
+      const message = error.response.data?.message || "An error occured";
       console.log(message);
       return {
         success: false,
-        message
+        message,
       };
     }
 

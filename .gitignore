@@ -4,3 +4,9 @@ node_modules/
 # Environment variables
 .env
 
+#static folders
+uploads/
+processed/
+
+#seed
+seed/

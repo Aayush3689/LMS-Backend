@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const userModel = require("../../models/user.model");
+const userModel = require("@app/Users/models/user.model");
 
 const handleCheckUser = async (mobile) => {
   const session = await mongoose.startSession();
@@ -21,8 +21,8 @@ const handleCheckUser = async (mobile) => {
 
     return {
       success: true,
-      user
-    }
+      user,
+    };
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
