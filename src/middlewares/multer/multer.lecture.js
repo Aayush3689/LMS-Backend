@@ -1,22 +1,17 @@
 const multer = require("multer");
 const path = require("path");
 const { v4: uuid } = require("uuid");
-const fs = require("fs");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    const uploadPath = path.join(__dirname, "../../uploads/lectures"); 
-    if (!fs.existsSync(uploadPath)) {
-      fs.mkdirSync(uploadPath, { recursive: true });
-    }
-
-    cb(null, uploadPath);
+    cb(null, "uploads/lectures");
   },
 
   filename: function (req, file, cb) {
+    console.log("file", file);
     const ext = path.extname(file.originalname);
     const randomString = uuid();
-    cb(null, "lecture-" + randomString + ext);
+    cb(null, "lecture" + randomString + ext);
   },
 });
 
