@@ -10,21 +10,37 @@ const PORT = process.env.PORT || 5000;
 // database connection function
 const connectDb = require("@config/db/connectdb.js");
 
+// CORS with options
+const corsOptions = {
+  origin: "*", // You can specify allowed domains if needed
+  methods: ["GET", "HEAD", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Range"],
+};
+app.use(cors(corsOptions));
+
 // global middlewares
-app.use(cors());
+app.use("/uploads", express.static("uploads"));
+app.use("/processed", (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Headers", "Origin, Range, Accept, Content-Type");
+  res.setHeader("Access-Control-Expose-Headers", "Content-Length, Content-Range");
+  next();
+}, express.static("processed"));
+const courseRoute = require("@app/Courses/routes/addcourse.route.js");
+const lectureRoute = require("@app/Lectures/routes/lectures.route.js");
+app.use("/api", courseRoute);
+app.use("/api", lectureRoute);
 app.use(express.json());
-app.use("/uploads", express.static("uploads"))
-app.use("/processed", express.static("processed"))
+app.use(express.urlencoded({ extended: true }))
+// app.use("/processed", express.static("processed"));
+// Serve processed HLS files with correct headers
+
 
 // routes import
 const userRoute = require("@app/Auth/routes/auth.route");
-const courseRoute = require("@app/Courses/routes/addcourse.route.js");
-const lectureRoute = require('@app/Lectures/routes/lectures.route.js')
 
 // routes use
 app.use("/api", userRoute);
-app.use("/api", courseRoute);
-app.use('/api', lectureRoute);
 
 app.get("/", (req, res) => {
   return res.status(200).json({

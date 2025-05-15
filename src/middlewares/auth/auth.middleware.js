@@ -30,7 +30,7 @@ const handleCheckForTokenMiddleWare = async (req, res, next) => {
       });
     }
 
-    req.user = fullUser; // safely store full user in request object
+    req.user = fullUser;
     next();
   } catch (error) {
     return res.status(401).json({

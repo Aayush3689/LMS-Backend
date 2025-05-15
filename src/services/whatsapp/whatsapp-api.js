@@ -43,9 +43,8 @@ const sendOtp = async (mobile, otp) => {
       headers: { "Content-Type": "application/json" },
     });
 
-    return response.data; // Return only the necessary data
+    return response.data;
   } catch (error) {
-    // error other than 2xx
     if (error.response) {
       console.log("error response data", error.response.data);
       const message = error.response.data?.message || "An error occured";
@@ -54,19 +53,13 @@ const sendOtp = async (mobile, otp) => {
         success: false,
         message,
       };
-    }
-
-    // request made but not respond
-    else if (error.request) {
+    } else if (error.request) {
       console.log("error request", error.request);
       return {
         success: false,
         message: "No response from server",
       };
-    }
-
-    // network error or unexpected error
-    else {
+    } else {
       console.log("unexpected error", error.message);
       return {
         success: false,

@@ -2,18 +2,18 @@ const courseModel = require("../models/courses.model");
 
 const handleAddCourse = async (req, res) => {
   try {
-    const { courseDetail } = req.body;
+    const courseData = req.body;
     const thumbnail = req.file;
 
-    // Check if courseDetail is present
-    if (!courseDetail) {
+    
+    if (!courseData) {
       return res.status(400).json({
         success: false,
         message: "Course detail not found",
       });
     }
 
-    // Check if thumbnail is present
+
     if (!thumbnail) {
       return res.status(400).json({
         success: false,
@@ -21,25 +21,15 @@ const handleAddCourse = async (req, res) => {
       });
     }
 
-    // Thumbnail file path
-    const thumbnailLink = `/uploads/${thumbnail.filename}`;
-
-    // Construct final data
-    const data = {
-      ...JSON.parse(courseDetail),
-      thumbnail: thumbnailLink,
-    };
-
     // Save to DB
-    const course = new courseModel(data);
-    await course.save();
+    const course = new courseModel(courseData);
 
     console.log("course", course);
 
     return res.status(201).json({
       success: true,
       message: "Course added successfully",
-      course,
+      // course,
     });
   } catch (error) {
     console.error("Error adding course:", error);

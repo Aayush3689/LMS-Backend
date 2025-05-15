@@ -21,14 +21,14 @@ const genarateAndSendOtp = async (mobile) => {
       });
 
     // Send OTP via WhatsApp
-    // const response = await sendOtp(mobile, otp);
-    // if (!response?.success) {
-    //   return {
-    //     success: false,
-    //     message: response.message,
-    //     status: 400,
-    //   };
-    // }
+    const response = await sendOtp(mobile, otp);
+    if (!response?.success) {
+      return {
+        success: false,
+        message: response.message,
+        status: 400,
+      };
+    }
 
     // store otp with 5min expiry time
     const otpKey = `otp:${mobile}`;
