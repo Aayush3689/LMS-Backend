@@ -37,7 +37,7 @@ app.use(express.urlencoded({ extended: true }))
 
 
 // routes import
-const userRoute = require("@app/Auth/routes/auth.route");
+const userRoute = require("@app/auth/routes/auth.route");
 
 // routes use
 app.use("/api", userRoute);
