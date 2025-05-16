@@ -1,4 +1,4 @@
-const userModel = require("@app/Users/models/user.model");
+const userModel = require("@app/users/models/user.model");
 const { signToken } = require("@services/JWT/jwt.token");
 
 const handleCheckForTokenMiddleWare = async (req, res, next) => {
