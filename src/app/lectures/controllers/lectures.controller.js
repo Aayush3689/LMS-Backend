@@ -22,7 +22,7 @@ const handleUploadLecture = async (req, res) => {
 
   const rawVideoPath = req.file.path;
   const lectureId = uuid();
-  const baseUrl = "http://localhost:3000";
+  const baseUrl = process.env.BASE_URL;
   const baseOutputPath = path.join("processed", lectureId);
 
   // start processing
