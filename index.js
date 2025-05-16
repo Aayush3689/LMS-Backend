@@ -1,5 +1,8 @@
 // dotenv integration
-require("dotenv").config();
+const dotenv = require("dotenv");
+const env = process.env.NODE_ENV || "development";
+dotenv.config({ path: `.env.${env}` });
+
 require("module-alias/register");
 const cors = require("cors");
 
@@ -20,21 +23,30 @@ app.use(cors(corsOptions));
 
 // global middlewares
 app.use("/uploads", express.static("uploads"));
-app.use("/processed", (req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Headers", "Origin, Range, Accept, Content-Type");
-  res.setHeader("Access-Control-Expose-Headers", "Content-Length, Content-Range");
-  next();
-}, express.static("processed"));
-const courseRoute = require("@app/Courses/routes/addcourse.route.js");
-const lectureRoute = require("@app/Lectures/routes/lectures.route.js");
+app.use(
+  "/processed",
+  (req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Origin, Range, Accept, Content-Type"
+    );
+    res.setHeader(
+      "Access-Control-Expose-Headers",
+      "Content-Length, Content-Range"
+    );
+    next();
+  },
+  express.static("processed")
+);
+const courseRoute = require("@app/courses/routes/addcourse.route.js");
+const lectureRoute = require("@app/lectures/routes/lectures.route.js");
 app.use("/api", courseRoute);
 app.use("/api", lectureRoute);
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
 // app.use("/processed", express.static("processed"));
 // Serve processed HLS files with correct headers
-
 
 // routes import
 const userRoute = require("@app/auth/routes/auth.route");
