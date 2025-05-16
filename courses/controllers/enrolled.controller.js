@@ -1,4 +1,4 @@
-const userModel = require("@app/users/models/user.model");
+const userModel = require("@app/Users/models/user.model");
 const courseModel = require("../models/courses.model");
 
 const handleEnrolledCourse = async (req, res) => {
