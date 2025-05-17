@@ -23,22 +23,7 @@ app.use(cors(corsOptions));
 
 // global middlewares
 app.use("/uploads", express.static("uploads"));
-app.use(
-  "/processed",
-  (req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Origin, Range, Accept, Content-Type"
-    );
-    res.setHeader(
-      "Access-Control-Expose-Headers",
-      "Content-Length, Content-Range"
-    );
-    next();
-  },
-  express.static("processed")
-);
+app.use("/processed", express.static("processed"));
 const courseRoute = require("@app/courses/routes/addcourse.route.js");
 const lectureRoute = require("@app/lectures/routes/lectures.route.js");
 app.use("/api", courseRoute);

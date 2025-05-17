@@ -25,6 +25,8 @@ const handleUploadLecture = async (req, res) => {
   const baseUrl = process.env.BASE_URL;
   const baseOutputPath = path.join("processed", lectureId);
 
+  fs.mkdirSync(baseOutputPath, { recursive: true });
+
   // start processing
   const startTranscoding = transcodeVideo(rawVideoPath, baseOutputPath);
 
@@ -49,7 +51,6 @@ const handleUploadLecture = async (req, res) => {
       masterPlaylistContent += `${name}/index.m3u8\n`;
     });
 
-    fs.mkdirSync(baseOutputPath, { recursive: true });
     fs.writeFileSync(masterPlaylistPath, masterPlaylistContent);
 
     return res.json({
