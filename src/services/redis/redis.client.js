@@ -2,7 +2,7 @@ const { createClient } = require("redis");
 
 const client = createClient({
   socket: {
-    host: "localhost", // Change to your Redis host if using a remote server
+    host: "localhost",
     port: 6379,
   },
 });

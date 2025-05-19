@@ -1,3 +1,7 @@
+// Sentry initialization (instrumentation)
+require("./instrument.js");
+const Sentry = require("@sentry/node");
+
 // dotenv integration
 const dotenv = require("dotenv");
 const env = process.env.NODE_ENV || "development";
@@ -5,40 +9,40 @@ dotenv.config({ path: `.env.${env}` });
 
 require("module-alias/register");
 const cors = require("cors");
-
 const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// database connection function
+// Database connection
 const connectDb = require("@config/db/connectdb.js");
 
-// CORS with options
+// CORS configuration
 const corsOptions = {
-  origin: "*", // You can specify allowed domains if needed
+  origin: "*",
   methods: ["GET", "HEAD", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Range"],
 };
 app.use(cors(corsOptions));
 
-// global middlewares
+// Static file serving
 app.use("/uploads", express.static("uploads"));
 app.use("/processed", express.static("processed"));
+
+// === ROUTES THAT USE MULTER (must come BEFORE express.json()) ===
 const courseRoute = require("@app/courses/routes/addcourse.route.js");
 const lectureRoute = require("@app/lectures/routes/lectures.route.js");
 app.use("/api", courseRoute);
 app.use("/api", lectureRoute);
+
+// === JSON + URL-ENCODED MIDDLEWARE ===
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use("/processed", express.static("processed"));
-// Serve processed HLS files with correct headers
 
-// routes import
+// === ROUTES THAT DON'T USE MULTER ===
 const userRoute = require("@app/auth/routes/auth.route");
-
-// routes use
 app.use("/api", userRoute);
 
+// Home route
 app.get("/", (req, res) => {
   return res.status(200).json({
     success: true,
@@ -46,15 +50,27 @@ app.get("/", (req, res) => {
   });
 });
 
-// start function
+// test error route
+app.get("/debug-sentry", function mainHandler(req, res) {
+  throw new Error("My first Sentry error!");
+});
+
+// Sentry error handler (must be after all routes and middleware)
+Sentry.setupExpressErrorHandler(app);
+app.use(function onError(err, req, res, next) {
+  res.statusCode = 500;
+  res.end(res.sentry + "\n");
+});
+
+// Server start
 const start = async () => {
   try {
     await connectDb(process.env.MONGO_URI);
     app.listen(PORT, () => {
-      console.log(`server is running on the port: ${PORT}`);
+      console.log(`Server is running on port: ${PORT}`);
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return error;
   }
 };

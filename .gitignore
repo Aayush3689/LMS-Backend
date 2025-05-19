@@ -10,3 +10,5 @@ processed/
 
 #seed
 seed/
+# Sentry Config File
+.sentryclirc

@@ -9,7 +9,7 @@ const handleAddCourse = async (req, res) => {
     if (!courseData) {
       return res.status(400).json({
         success: false,
-        message: "Course detail not found",
+        message: "Course data should not be empty",
       });
     }
 
@@ -28,8 +28,7 @@ const handleAddCourse = async (req, res) => {
 
     return res.status(201).json({
       success: true,
-      message: "Course added successfully",
-      // course,
+      message: "Course created successfully",
     });
   } catch (error) {
     console.error("Error adding course:", error);
