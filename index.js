@@ -1,7 +1,3 @@
-// Sentry initialization (instrumentation)
-require("./instrument.js");
-const Sentry = require("@sentry/node");
-
 // dotenv integration
 const dotenv = require("dotenv");
 const env = process.env.NODE_ENV || "development";
@@ -50,17 +46,6 @@ app.get("/", (req, res) => {
   });
 });
 
-// test error route
-app.get("/debug-sentry", function mainHandler(req, res) {
-  throw new Error("My first Sentry error!");
-});
-
-// Sentry error handler (must be after all routes and middleware)
-Sentry.setupExpressErrorHandler(app);
-app.use(function onError(err, req, res, next) {
-  res.statusCode = 500;
-  res.end(res.sentry + "\n");
-});
 
 // Server start
 const start = async () => {
