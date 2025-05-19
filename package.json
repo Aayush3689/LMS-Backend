@@ -5,9 +5,8 @@
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "start:dev": "cross-env NODE_ENV=development node index.js && npm run sentry:sourcemaps",
-    "start:prod": "NODE_ENV=production node index.js",
-    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org master-website --project node-express ./outputsentry && sentry-cli sourcemaps upload --org master-website --project node-express ./outputsentry"
+    "start:dev": "cross-env NODE_ENV=development node index.js",
+    "start:prod": "NODE_ENV=production node index.js"
   },
   "keywords": [],
   "author": "",

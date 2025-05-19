@@ -15,8 +15,8 @@ const connectDb = require("@config/db/connectdb.js");
 // CORS configuration
 const corsOptions = {
   origin: "*",
-  methods: ["GET", "HEAD", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Range"],
+  // methods: ["GET", "HEAD", "OPTIONS"],
+  // allowedHeaders: ["Content-Type", "Range"],
 };
 app.use(cors(corsOptions));
 
@@ -25,7 +25,7 @@ app.use("/uploads", express.static("uploads"));
 app.use("/processed", express.static("processed"));
 
 // === ROUTES THAT USE MULTER (must come BEFORE express.json()) ===
-const courseRoute = require("@app/courses/routes/addcourse.route.js");
+const courseRoute = require("@app/courses/routes/createcourse.route.js");
 const lectureRoute = require("@app/lectures/routes/lectures.route.js");
 app.use("/api", courseRoute);
 app.use("/api", lectureRoute);
