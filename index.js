@@ -24,17 +24,17 @@ app.use(cors(corsOptions));
 app.use("/uploads", express.static("uploads"));
 app.use("/processed", express.static("processed"));
 
-// === ROUTES THAT USE MULTER (must come BEFORE express.json()) ===
+// === ROUTES THAT USE MULTER  ===
 const courseRoute = require("@app/courses/routes/createcourse.route.js");
 const lectureRoute = require("@app/lectures/routes/lectures.route.js");
 app.use("/api", courseRoute);
 app.use("/api", lectureRoute);
 
-// === JSON + URL-ENCODED MIDDLEWARE ===
+// ===  ===
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// === ROUTES THAT DON'T USE MULTER ===
+// ===  ===
 const userRoute = require("@app/auth/routes/auth.route");
 app.use("/api", userRoute);
 
