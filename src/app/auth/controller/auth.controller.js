@@ -1,3 +1,4 @@
+const { success } = require("@utils/responseHandler");
 const {
   genarateAndSendOtp,
   validateOtp,
@@ -88,5 +89,13 @@ const handleValidateToken = (req, res) => {
   });
 };
 
+//======= proect video url =======// 
+const handleProtectedUrl = (req, res) => {
+  return res.status(200).json({
+    success: true,
+    message: 'you can access the url'
+  })
+}
+
 // export functions
-module.exports = { handleGenerateOtp, handleValidateOtp, handleValidateToken };
+module.exports = { handleGenerateOtp, handleValidateOtp, handleValidateToken, handleProtectedUrl };
