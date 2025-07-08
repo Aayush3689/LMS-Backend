@@ -36,7 +36,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // ===  ===
 const userRoute = require("@app/auth/routes/auth.route");
-app.use("/api", userRoute);
+app.use(userRoute);
 
 // Home route
 app.get("/", (req, res) => {
